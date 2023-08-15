@@ -1,0 +1,21 @@
+
+.todo-list{
+    
+    display: flex;
+    justify-content: center;
+}
+ul{
+    list-style: none;
+    padding: 0;
+    width: 50%;
+}
+
+li{
+    margin: 5px 0 ;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.completed{
+    text-decoration: line-through;
+}

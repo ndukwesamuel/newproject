@@ -1,32 +1,27 @@
 import { useState } from "react";
 
-const Home = () => {
-  const [theme, setTheme] = useState("light");
+import "./home.css";
+import TodoList from "../components/TodoList";
 
-  const [name, setName] = useState("samheart");
-  const [age, setAge] = useState(20);
+const Home = ({ data, age }) => {
+  console.log(data);
+  console.log(age);
 
-  const handleClick = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const todos = [
+    { id: 1, text: "Buy groceries", completed: false },
+    { id: 2, text: "Finish homework", completed: true },
+    { id: 3, text: "Go for a run", completed: false },
+    { id: 4, text: "Call a friend", completed: true },
+  ];
 
-  const newahandleClick = () => {
-    setName("Emeka");
-    setAge(30);
-  };
   return (
     <div>
-      <h1>Home</h1>
-
-      <div>
-        <p>name: {name}</p>
-        <p>age: {age}</p>
-        <span onClick={newahandleClick}> click me</span>
+      <h1>Todo</h1>
+      <div className="todo-list">
+        {/* <p>{data}</p>
+        <p>{age}</p> */}
+        <TodoList items={todos} />
       </div>
-
-      <h2> let theme = {theme}</h2>
-
-      <button onClick={handleClick}> click</button>
     </div>
   );
 };

@@ -5,10 +5,12 @@ import Home from "./Page/Home";
 import "./App.css";
 
 function App() {
+  let name = "Himanshu";
+  let age = 20;
   return (
     <div>
       <Navbar />
-      <Home />
+      <Home data={name} age={age} />
     </div>
   );
 }
