@@ -25,6 +25,14 @@
   cursor: pointer;
 }
 
+span{
+
+background-color: blue;
+color: white;
+padding: 5px;
+border-radius: 3px;
+}
+
 
 
 .navbar-link:hover{
