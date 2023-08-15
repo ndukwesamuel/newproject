@@ -2,37 +2,34 @@ import { useState } from "react";
 
 import "./home.css";
 import TodoList from "../components/TodoList";
+import { Todos } from "../uitils";
 
-const Home = ({ data, age }) => {
-  console.log(data);
-  console.log(age);
+const Home = ({}) => {
+  const [todos, setTodos] = useState(Todos);
 
-  const todos = [
-    { id: 1, text: "Buy groceries", completed: false },
-    { id: 2, text: "Finish homework", completed: true },
-    { id: 3, text: "Go for a run", completed: false },
-    { id: 4, text: "Call a friend", completed: true },
-  ];
+  const markComplete = (id) => {
+    console.log(id);
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+
+    setTodos(updatedTodos);
+  };
+
+  const deleteTodo = (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+  };
 
   return (
     <div>
       <h1>Todo</h1>
       <div className="todo-list">
-        {/* <p>{data}</p>
-        <p>{age}</p> */}
-        <TodoList items={todos} />
-      </div>
-
-      <div className="">
-        <h2> Uncompleted Tasks</h2>
-
-        <TodoList items={todos.filter((todo) => !todo.completed)} />
-      </div>
-
-      <div className="">
-        <h2> completed Tasks</h2>
-
-        <TodoList items={todos.filter((todo) => todo.completed)} />
+        <TodoList
+          items={todos}
+          markComplete={markComplete}
+          deleteTodo={deleteTodo}
+        />
       </div>
     </div>
   );
