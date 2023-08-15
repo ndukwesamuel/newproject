@@ -2,6 +2,7 @@ import Home from "./Home";
 
 import "./App.css";
 import About from "./About";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   let name = "React";
@@ -14,6 +15,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <Navbar />
       <h1 className="main">Todo List</h1>
 
       <h1> {name} </h1>
