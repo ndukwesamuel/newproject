@@ -22,6 +22,18 @@ const Home = ({ data, age }) => {
         <p>{age}</p> */}
         <TodoList items={todos} />
       </div>
+
+      <div className="">
+        <h2> Uncompleted Tasks</h2>
+
+        <TodoList items={todos.filter((todo) => !todo.completed)} />
+      </div>
+
+      <div className="">
+        <h2> completed Tasks</h2>
+
+        <TodoList items={todos.filter((todo) => todo.completed)} />
+      </div>
     </div>
   );
 };
