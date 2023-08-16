@@ -5,7 +5,7 @@ import TodoList from "../components/TodoList";
 import { Todos } from "../uitils";
 
 const Home = ({}) => {
-  const [todos, setTodos] = useState(Todos);
+  const [todos, setTodos] = useState(null);
   const [count, setCount] = useState(0);
 
   console.log("todos");
@@ -36,18 +36,39 @@ const Home = ({}) => {
     setTodos(updatedTodos);
   };
 
+  const [quote, setQuote] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/todos")
+      .then((res) => res.json())
+      .then((data) => setTodos(data));
+  }, [count]);
+
+  console.log(quote);
+
   return (
     <div>
       <h1>Todo</h1>
 
-      <button onClick={handleCount}>CLick {count} times </button>
-      <div className="todo-list">
-        <TodoList
-          items={todos}
-          markComplete={markComplete}
-          deleteTodo={deleteTodo}
-        />
+      <div>
+        <h1>Random Quote</h1>
+
+        {console.log(quote)}
       </div>
+
+      <button onClick={handleCount}>CLick {count} times </button>
+
+      {todos ? (
+        <div className="todo-list">
+          <TodoList
+            items={todos}
+            markComplete={markComplete}
+            deleteTodo={deleteTodo}
+          />
+        </div>
+      ) : (
+        <h1> No data found </h1>
+      )}
     </div>
   );
 };
