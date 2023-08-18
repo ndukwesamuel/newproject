@@ -1,76 +1,99 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import axios from "axios";
+import TodoList from "../components/TodoList";
 
 import "./home.css";
-import TodoList from "../components/TodoList";
-import { Todos } from "../uitils";
+import TodoForm from "../components/TodoForm";
 
-const Home = ({}) => {
-  const [todos, setTodos] = useState(null);
-  const [count, setCount] = useState(0);
+function Home() {
+  const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log("todos");
+  const [newTodoText, setNewTodoText] = useState("");
 
   useEffect(() => {
-    console.log("Home");
+    setIsLoading(true);
+
+    axios
+      .get("http://localhost:5000/todos")
+      .then((res) => {
+        const data = res.data;
+        setTodos(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+      });
   }, []);
 
-  const handleCount = () => {
-    setCount((preCount) => preCount + 1);
+  const deleteTodo = (id) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:5000/todos/${id}`)
+      .then(() => {
+        const updatedTodos = todos.filter((todo) => todo.id !== id);
+        setTodos(updatedTodos);
+      })
+      .catch((err) => {
+        console.error("Error deleting todo:", err);
+      });
   };
-
-  useEffect(() => {
-    document.title = `You clicked ${count} times`;
-  }, [count]);
 
   const markComplete = (id) => {
-    console.log(id);
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-
-    setTodos(updatedTodos);
+    axios
+      .put(`http://localhost:5000/todos/${id}`, { completed: true })
+      .then(() => {
+        const updatedTodos = todos.map((todo) => {
+          if (todo.id === id) {
+            return { ...todo, completed: true };
+          }
+          return todo;
+        });
+        setTodos(updatedTodos);
+      })
+      .catch((err) => {
+        console.error("Error marking as complete:", err);
+      });
   };
 
-  const deleteTodo = (id) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updatedTodos);
+  const handleAddTodo = (newTodo) => {
+    console.log(newTodo);
+    axios
+      .post("http://localhost:5000/todos", newTodo)
+      .then((res) => {
+        const addedTodo = res.data;
+        setTodos([...todos, addedTodo]);
+      })
+      .catch((err) => {
+        console.error("Error adding todo:", err);
+      });
   };
-
-  const [quote, setQuote] = useState(null);
-
-  useEffect(() => {
-    fetch("http://localhost:5000/todos")
-      .then((res) => res.json())
-      .then((data) => setTodos(data));
-  }, [count]);
-
-  console.log(quote);
 
   return (
     <div>
-      <h1>Todo</h1>
-
       <div>
-        <h1>Random Quote</h1>
-
-        {console.log(quote)}
-      </div>
-
-      <button onClick={handleCount}>CLick {count} times </button>
-
-      {todos ? (
-        <div className="todo-list">
-          <TodoList
-            items={todos}
-            markComplete={markComplete}
-            deleteTodo={deleteTodo}
-          />
+        <div className="main_form">
+          <TodoForm onAddTodo={handleAddTodo} />
         </div>
-      ) : (
-        <h1> No data found </h1>
-      )}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            {todos && (
+              <div className="todo-list">
+                <TodoList
+                  items={todos}
+                  markComplete={markComplete}
+                  deleteTodo={deleteTodo}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
-};
+}
 
 export default Home;
